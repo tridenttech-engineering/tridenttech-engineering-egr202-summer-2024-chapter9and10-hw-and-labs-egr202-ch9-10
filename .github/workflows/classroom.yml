@@ -1,0 +1,74 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: lab9-2
+      id: lab9-2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: lab9-2
+        setup-command: ''
+        command: make clean && make test_lab9-2 && make lab9-2 && ./test_files/test_lab9-2
+        input: ''
+        expected-output: Test passed!
+        comparison-method: contains
+        timeout: 10
+        max-score: 1      
+    - name: hw9-19
+      id: hw9-19
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: hw9-19
+        setup-command: ''
+        command: make clean && make test_hw9-19 && make hw9-19 && ./test_files/test_hw9-19
+        input: ''
+        expected-output: Test passed!
+        comparison-method: contains
+        timeout: 10
+        max-score: 1      
+    - name: lab10-2
+      id: lab10-2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: lab10-2
+        setup-command: ''
+        command: make clean && make test_lab10-2 && make lab10-2 && ./test_files/test_lab10-2
+        input: ''
+        expected-output: Test passed!
+        comparison-method: contains
+        timeout: 10
+        max-score: 1      
+    - name: hw10-13
+      id: hw10-13
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: hw10-13
+        setup-command: ''
+        command: make clean && make test_hw10-13 && make hw10-13 && ./test_files/test_hw10-13
+        input: ''
+        expected-output: Test passed!
+        comparison-method: contains
+        timeout: 10
+        max-score: 1           
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        LAB9-2_RESULTS: "${{steps.lab9-2.outputs.result}}"
+        HW9-19_RESULTS: "${{steps.hw9-19.outputs.result}}"
+        LAB10-2_RESULTS: "${{steps.lab10-2.outputs.result}}"
+        HW10-13_RESULTS: "${{steps.hw10-13.outputs.result}}"
+        LAB7-6_RESULTS: "${{steps.lab7-6.outputs.result}}"
+        HW7-16_RESULTS: "${{steps.hw7-16.outputs.result}}"
+      with:
+        runners: lab9-2,hw9-19,lab10-2,hw10-13
